@@ -1,206 +1,182 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Centro de Administración</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Centro de Administración</title>
 
-<style>
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-}
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
 
-body{
-    min-height:100vh;
-    background:
-    radial-gradient(circle at top left,#7c3aed 0,transparent 35%),
-    radial-gradient(circle at bottom right,#06b6d4 0,transparent 35%),
-    #0f172a;
-    color:#fff;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    padding:30px;
-}
+    body {
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at top left, #7c3aed 0, transparent 35%),
+        radial-gradient(circle at bottom right, #06b6d4 0, transparent 35%),
+        #0f172a;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 30px;
+    }
 
-.app{
-    width:100%;
-    max-width:1000px;
-    text-align:center;
-}
+    .app {
+      width: 100%;
+      max-width: 1000px;
+      text-align: center;
+    }
 
-.logo{
-    font-size:48px;
-    margin-bottom:15px;
-}
+    .logo {
+      font-size: 48px;
+      margin-bottom: 15px;
+    }
 
-h1{
-    font-size:clamp(32px,5vw,56px);
-    margin-bottom:12px;
-}
+    h1 {
+      font-size: clamp(32px, 5vw, 56px);
+      margin-bottom: 12px;
+    }
 
-.subtitle{
-    color:#cbd5e1;
-    font-size:18px;
-    margin-bottom:45px;
-}
+    .subtitle {
+      color: #cbd5e1;
+      font-size: 18px;
+      margin-bottom: 45px;
+    }
 
-.cards{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
-    gap:30px;
-}
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 28px;
+    }
 
-.card{
-    background:rgba(255,255,255,.12);
-    border:1px solid rgba(255,255,255,.22);
-    border-radius:28px;
-    padding:35px;
-    backdrop-filter:blur(18px);
-    box-shadow:0 25px 60px rgba(0,0,0,.35);
-    transition:.25s;
-}
+    .card {
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      border-radius: 28px;
+      padding: 35px;
+      backdrop-filter: blur(18px);
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.35);
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
 
-.card:hover{
-    transform:translateY(-8px);
-    box-shadow:0 35px 80px rgba(0,0,0,.45);
-}
+    .card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 35px 80px rgba(0, 0, 0, 0.45);
+    }
 
-.logo-proyecto{
-    width:130px;
-    height:130px;
-    margin:0 auto 20px;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-}
+    .project-logo {
+      width: 150px;
+      height: 150px;
+      margin: 0 auto 22px;
+      background: white;
+      border-radius: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.25);
+    }
 
-.logo-proyecto img{
-    max-width:100%;
-    max-height:100%;
-    object-fit:contain;
-}
+    .project-logo img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      display: block;
+    }
 
-.card h2{
-    font-size:28px;
-    margin-bottom:12px;
-}
+    .card h2 {
+      font-size: 26px;
+      margin-bottom: 12px;
+    }
 
-.card p{
-    color:#cbd5e1;
-    margin-bottom:25px;
-    line-height:1.5;
-}
+    .card p {
+      color: #cbd5e1;
+      margin-bottom: 25px;
+      line-height: 1.5;
+    }
 
-.status{
-    display:inline-flex;
-    align-items:center;
-    gap:8px;
-    background:rgba(34,197,94,.16);
-    color:#86efac;
-    padding:8px 14px;
-    border-radius:999px;
-    font-size:14px;
-    margin-bottom:24px;
-}
+    .status {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(34, 197, 94, 0.16);
+      color: #86efac;
+      padding: 8px 14px;
+      border-radius: 999px;
+      font-size: 14px;
+      margin-bottom: 24px;
+    }
 
-.button{
-    display:inline-block;
-    width:100%;
-    padding:15px;
-    border-radius:16px;
-    text-decoration:none;
-    color:#fff;
-    font-weight:bold;
-    background:linear-gradient(135deg,#8b5cf6,#06b6d4);
-    transition:.2s;
-}
+    .button {
+      display: inline-block;
+      width: 100%;
+      padding: 15px 20px;
+      border-radius: 16px;
+      text-decoration: none;
+      color: white;
+      font-weight: 700;
+      background: linear-gradient(135deg, #8b5cf6, #06b6d4);
+      transition: opacity 0.2s ease, transform 0.2s ease;
+    }
 
-.button:hover{
-    transform:scale(1.03);
-}
+    .button:hover {
+      opacity: 0.9;
+      transform: scale(1.03);
+    }
 
-footer{
-    margin-top:40px;
-    color:#94a3b8;
-    font-size:14px;
-}
-</style>
-
+    footer {
+      margin-top: 40px;
+      color: #94a3b8;
+      font-size: 14px;
+    }
+  </style>
 </head>
 
 <body>
+  <main class="app">
+    <div class="logo">🚀</div>
 
-<main class="app">
+    <h1>Centro de Administración</h1>
+    <p class="subtitle">Selecciona el proyecto que quieres gestionar</p>
 
-<div class="logo">🚀</div>
+    <section class="cards">
+      <article class="card">
+        <div class="project-logo">
+          <img src="img/Logo%20Polvillo.webp" alt="Pedidos Polvillo" />
+        </div>
 
-<h1>Centro de Administración</h1>
+        <h2>Pedidos Polvillo</h2>
+        <p>Accede al panel de administración.</p>
+        <div class="status">● Online</div>
 
-<p class="subtitle">
-Selecciona el proyecto que quieres gestionar
-</p>
+        <a class="button" href="https://pedidos-lojo-polvillo.vercel.app/admin" target="_blank" rel="noopener">
+          Entrar al panel
+        </a>
+      </article>
 
-<section class="cards">
+      <article class="card">
+        <div class="project-logo">
+          <img src="img/logo-lojo.jpg" alt="Pedidos Lojo" />
+        </div>
 
-<article class="card">
+        <h2>Pedidos Lojo</h2>
+        <p>Accede al panel de administración.</p>
+        <div class="status">● Online</div>
 
-<div class="logo-proyecto">
-<img src="img/Logo Polvillo.webp" alt="Pedidos Polvillo">
-</div>
+        <a class="button" href="https://pedidos-lojo.vercel.app/?admin" target="_blank" rel="noopener">
+          Entrar al panel
+        </a>
+      </article>
+    </section>
 
-<h2>Pedidos Polvillo</h2>
-
-<p>
-Accede al panel de administración.
-</p>
-
-<div class="status">
-● Online
-</div>
-
-<a class="button"
-href="TU_URL_PANEL_1"
-target="_blank">
-Entrar al panel
-</a>
-
-</article>
-
-<article class="card">
-
-<div class="logo-proyecto">
-<img src="img/logo-lojo.jpg" alt="Pedidos Lojo">
-</div>
-
-<h2>Pedidos Lojo</h2>
-
-<p>
-Accede al panel de administración.
-</p>
-
-<div class="status">
-● Online
-</div>
-
-<a class="button"
-href="TU_URL_PANEL_2"
-target="_blank">
-Entrar al panel
-</a>
-
-</article>
-
-</section>
-
-<footer>
-Panel privado · Gestión rápida de proyectos
-</footer>
-
-</main>
-
+    <footer>
+      Panel privado · Gestión rápida de proyectos
+    </footer>
+  </main>
 </body>
 </html>
