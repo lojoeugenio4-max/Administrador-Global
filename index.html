@@ -3,7 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
   <title>Centro de Administración</title>
+
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#0f172a" />
 
   <style>
     * {
@@ -30,11 +34,6 @@
       width: 100%;
       max-width: 1000px;
       text-align: center;
-    }
-
-    .logo {
-      font-size: 48px;
-      margin-bottom: 15px;
     }
 
     h1 {
@@ -139,8 +138,6 @@
 
 <body>
   <main class="app">
-    <div class="logo">🚀</div>
-
     <h1>Centro de Administración</h1>
     <p class="subtitle">Selecciona el proyecto que quieres gestionar</p>
 
@@ -178,5 +175,11 @@
       Panel privado · Gestión rápida de proyectos
     </footer>
   </main>
+
+  <script>
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("sw.js");
+    }
+  </script>
 </body>
 </html>
