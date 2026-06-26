@@ -1,21 +1,25 @@
 {
-  "name": "Centro de Administración",
-  "short_name": "Admin Global",
+  "name": "Administración Pedidos",
+  "short_name": "Pedidos",
+  "description": "Acceso rápido a los paneles de administración.",
   "start_url": "./",
+  "scope": "./",
   "display": "standalone",
   "background_color": "#0f172a",
   "theme_color": "#0f172a",
   "orientation": "portrait",
   "icons": [
     {
-      "src": "img/lojo.png",
+      "src": "img/icon-192.png",
       "sizes": "192x192",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     },
     {
-      "src": "img/lojo.png",
+      "src": "img/icon-512.png",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     }
   ]
 }
