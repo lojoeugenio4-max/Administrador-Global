@@ -3,11 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
   <title>Centro de Administración</title>
-
-  <link rel="manifest" href="manifest.json" />
-  <meta name="theme-color" content="#0f172a" />
 
   <style>
     * {
@@ -54,18 +50,23 @@
     }
 
     .card {
+      display: block;
+      text-decoration: none;
+      color: white;
+      cursor: pointer;
       background: rgba(255, 255, 255, 0.12);
       border: 1px solid rgba(255, 255, 255, 0.22);
       border-radius: 28px;
       padding: 35px;
       backdrop-filter: blur(18px);
       box-shadow: 0 25px 60px rgba(0, 0, 0, 0.35);
-      transition: transform 0.25s ease, box-shadow 0.25s ease;
+      transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
     }
 
     .card:hover {
       transform: translateY(-8px);
       box-shadow: 0 35px 80px rgba(0, 0, 0, 0.45);
+      border-color: rgba(255, 255, 255, 0.4);
     }
 
     .project-logo {
@@ -108,24 +109,6 @@
       padding: 8px 14px;
       border-radius: 999px;
       font-size: 14px;
-      margin-bottom: 24px;
-    }
-
-    .button {
-      display: inline-block;
-      width: 100%;
-      padding: 15px 20px;
-      border-radius: 16px;
-      text-decoration: none;
-      color: white;
-      font-weight: 700;
-      background: linear-gradient(135deg, #8b5cf6, #06b6d4);
-      transition: opacity 0.2s ease, transform 0.2s ease;
-    }
-
-    .button:hover {
-      opacity: 0.9;
-      transform: scale(1.03);
     }
 
     footer {
@@ -142,7 +125,7 @@
     <p class="subtitle">Selecciona el proyecto que quieres gestionar</p>
 
     <section class="cards">
-      <article class="card">
+      <a class="card" href="https://pedidos-lojo-polvillo.vercel.app/admin" target="_blank" rel="noopener">
         <div class="project-logo">
           <img src="img/polvillo.png" alt="Pedidos Polvillo">
         </div>
@@ -150,13 +133,9 @@
         <h2>Pedidos Polvillo</h2>
         <p>Accede al panel de administración.</p>
         <div class="status">● Online</div>
+      </a>
 
-        <a class="button" href="https://pedidos-lojo-polvillo.vercel.app/admin" target="_blank" rel="noopener">
-          Entrar al panel
-        </a>
-      </article>
-
-      <article class="card">
+      <a class="card" href="https://pedidos-lojo.vercel.app/?admin" target="_blank" rel="noopener">
         <div class="project-logo">
           <img src="img/lojo.png" alt="Pedidos Lojo">
         </div>
@@ -164,22 +143,12 @@
         <h2>Pedidos Lojo</h2>
         <p>Accede al panel de administración.</p>
         <div class="status">● Online</div>
-
-        <a class="button" href="https://pedidos-lojo.vercel.app/?admin" target="_blank" rel="noopener">
-          Entrar al panel
-        </a>
-      </article>
+      </a>
     </section>
 
     <footer>
       Panel privado · Gestión rápida de proyectos
     </footer>
   </main>
-
-  <script>
-    if ("serviceWorker" in navigator) {
-      navigator.serviceWorker.register("sw.js");
-    }
-  </script>
 </body>
 </html>
