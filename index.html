@@ -33,6 +33,7 @@
       width: 100%;
       max-width: 1000px;
       text-align: center;
+      display: none;
     }
 
     h1 {
@@ -113,11 +114,72 @@
       border-radius: 999px;
       font-size: 14px;
     }
+
+    .login {
+      width: 100%;
+      max-width: 420px;
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      border-radius: 28px;
+      padding: 35px;
+      text-align: center;
+      backdrop-filter: blur(18px);
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.35);
+    }
+
+    .login h1 {
+      font-size: 34px;
+      margin-bottom: 12px;
+    }
+
+    .login p {
+      color: #cbd5e1;
+      margin-bottom: 24px;
+    }
+
+    .login input {
+      width: 100%;
+      padding: 16px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.25);
+      background: rgba(255,255,255,0.12);
+      color: white;
+      font-size: 18px;
+      text-align: center;
+      outline: none;
+      margin-bottom: 16px;
+    }
+
+    .login button {
+      width: 100%;
+      padding: 15px;
+      border: 0;
+      border-radius: 16px;
+      color: white;
+      font-weight: 700;
+      font-size: 16px;
+      cursor: pointer;
+      background: linear-gradient(135deg, #8b5cf6, #06b6d4);
+    }
+
+    .error {
+      color: #fca5a5;
+      margin-top: 14px;
+      display: none;
+    }
   </style>
 </head>
 
 <body>
-  <main class="app">
+  <section class="login" id="login">
+    <h1>Administración Pedidos</h1>
+    <p>Introduce la clave de acceso</p>
+    <input id="password" type="password" placeholder="Clave" autocomplete="off">
+    <button onclick="checkPassword()">Entrar</button>
+    <div class="error" id="error">Clave incorrecta</div>
+  </section>
+
+  <main class="app" id="app">
     <h1>Administración Pedidos</h1>
     <p class="subtitle">Selecciona el proyecto que quieres gestionar</p>
 
@@ -143,9 +205,46 @@
   </main>
 
   <script>
+    const ACCESS_CODE = "LOJOCESTA";
+    const ACCESS_KEY = "administracion_pedidos_access";
+    const ONE_DAY = 24 * 60 * 60 * 1000;
+
+    function showApp() {
+      document.getElementById("login").style.display = "none";
+      document.getElementById("app").style.display = "block";
+    }
+
+    function checkPassword() {
+      const value = document.getElementById("password").value;
+
+      if (value === ACCESS_CODE) {
+        localStorage.setItem(ACCESS_KEY, Date.now().toString());
+        showApp();
+      } else {
+        document.getElementById("error").style.display = "block";
+      }
+    }
+
+    document.getElementById("password").addEventListener("keydown", function(event) {
+      if (event.key === "Enter") {
+        checkPassword();
+      }
+    });
+
+    const lastAccess = localStorage.getItem(ACCESS_KEY);
+
+    if (lastAccess && Date.now() - Number(lastAccess) < ONE_DAY) {
+      showApp();
+    }
+
     if ("serviceWorker" in navigator) {
-      window.addEventListener("load", () => {
-        navigator.serviceWorker.register("./sw.js");
+      window.addEventListener("load", async () => {
+        const registration = await navigator.serviceWorker.register("./sw.js");
+        registration.update();
+
+        navigator.serviceWorker.addEventListener("controllerchange", () => {
+          window.location.reload();
+        });
       });
     }
   </script>
