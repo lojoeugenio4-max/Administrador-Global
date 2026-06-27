@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
   <title>Administración Pedidos</title>
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#0f172a">
@@ -112,12 +113,6 @@
       border-radius: 999px;
       font-size: 14px;
     }
-
-    footer {
-      margin-top: 40px;
-      color: #94a3b8;
-      font-size: 14px;
-    }
   </style>
 </head>
 
@@ -127,31 +122,26 @@
     <p class="subtitle">Selecciona el proyecto que quieres gestionar</p>
 
     <section class="cards">
-      <a class="card" href="https://pedidos-lojo-polvillo.vercel.app/admin" target="_blank" rel="noopener">
+      <a class="card" href="https://pedidos-lojo-polvillo.vercel.app/admin">
         <div class="project-logo">
           <img src="img/polvillo.png" alt="Pedidos Polvillo">
         </div>
-
         <h2>Pedidos Polvillo</h2>
         <p>Accede al panel de administración.</p>
         <div class="status">● Online</div>
       </a>
 
-      <a class="card" href="https://pedidos-lojo.vercel.app/?admin" target="_blank" rel="noopener">
+      <a class="card" href="https://pedidos-lojo.vercel.app/?admin">
         <div class="project-logo">
           <img src="img/lojo.png" alt="Pedidos Lojo">
         </div>
-
         <h2>Pedidos Lojo</h2>
         <p>Accede al panel de administración.</p>
         <div class="status">● Online</div>
       </a>
     </section>
-
-    <footer>
-      Panel privado · Gestión rápida de proyectos
-    </footer>
   </main>
+
   <script>
     if ("serviceWorker" in navigator) {
       window.addEventListener("load", () => {
