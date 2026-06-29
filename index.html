@@ -120,10 +120,89 @@
       font-size: 14px;
     }
   
-#authOverlay{position:fixed;inset:0;background:#0f172a;display:flex;align-items:center;justify-content:center;z-index:9999}
-#authBox{background:white;color:#111;padding:30px;border-radius:16px;width:min(360px,90vw)}
-#authBox input{width:100%;padding:10px;margin:10px 0}
-#authBox button{width:100%;padding:10px}
+
+#authOverlay {
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(circle at top left, #7c3aed 0, transparent 35%),
+    radial-gradient(circle at bottom right, #06b6d4 0, transparent 35%),
+    #0f172a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  padding: 24px;
+}
+
+#authBox {
+  width: min(380px, 94vw);
+  background: rgba(255,255,255,0.96);
+  color: #0f172a;
+  border-radius: 24px;
+  padding: 30px;
+  box-shadow: 0 30px 90px rgba(0,0,0,0.45);
+  text-align: center;
+}
+
+#authBox h2 {
+  margin-bottom: 10px;
+  font-size: 28px;
+}
+
+#authBox p {
+  color: #475569;
+  margin-bottom: 18px;
+}
+
+#authBox input {
+  width: 100%;
+  padding: 13px 14px;
+  margin: 8px 0 14px;
+  border: 1px solid #cbd5e1;
+  border-radius: 14px;
+  font-size: 16px;
+}
+
+#authBox button,
+#logoutButton {
+  border: 0;
+  border-radius: 14px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+#authBox button {
+  width: 100%;
+  padding: 13px 14px;
+  background: #0f172a;
+  color: white;
+  font-size: 16px;
+}
+
+#authError {
+  min-height: 20px;
+  margin-top: 12px;
+  color: #dc2626 !important;
+  font-weight: 700;
+}
+
+#logoutButton {
+  position: fixed;
+  top: 14px;
+  right: 14px;
+  z-index: 50;
+  background: rgba(255,255,255,0.16);
+  color: white;
+  border: 1px solid rgba(255,255,255,0.28);
+  padding: 9px 13px;
+  backdrop-filter: blur(12px);
+}
+
+#logoutButton:hover {
+  background: rgba(255,255,255,0.26);
+}
+
 
 </style>
 </head>
@@ -162,31 +241,152 @@
     }
   </script>
 
+
 <script>
-const APP_PASSWORD="LOJOCESTA";
-const DAY_KEY="admin_day";
-const AUTH_KEY="admin_ok";
-const LAST_KEY="admin_last";
-function today(){return new Date().toISOString().slice(0,10);}
-function logout(){localStorage.removeItem(AUTH_KEY);show();}
-function ok(){return localStorage.getItem(AUTH_KEY)==="1"&&localStorage.getItem(DAY_KEY)===today();}
-function touch(){localStorage.setItem(LAST_KEY,String(Date.now()));}
-function show(){
- if(document.getElementById("authOverlay")) return;
- document.body.insertAdjacentHTML("beforeend",`<div id="authOverlay"><div id="authBox"><h2>Acceso</h2><input id="pwd" type="password" placeholder="Contraseña"><button id="go">Entrar</button><p id="err" style="color:red"></p></div></div>`);
- document.getElementById("go").onclick=()=>{
-  if(document.getElementById("pwd").value===APP_PASSWORD){
-    localStorage.setItem(AUTH_KEY,"1");
-    localStorage.setItem(DAY_KEY,today());
-    touch();
-    document.getElementById("authOverlay").remove();
-  }else document.getElementById("err").textContent="Contraseña incorrecta";
- };
+const APP_PASSWORD_HASH = "d862ee262b0ade64a88dba0b94c993bf29bba9688657650da4474845ec579add"; // Hash SHA-256 de la contraseña actual: CAMBIAR123
+const DAY_KEY = "admin_day";
+const AUTH_KEY = "admin_ok";
+const LAST_KEY = "admin_last";
+const INACTIVITY_LIMIT_MS = 15 * 60 * 1000;
+
+function today() {
+  return new Date().toISOString().slice(0, 10);
 }
-["click","touchstart","keydown","mousemove","scroll"].forEach(e=>document.addEventListener(e,()=>{if(ok())touch();},{passive:true}));
-setInterval(()=>{if(ok()){let t=Number(localStorage.getItem(LAST_KEY)||0);if(Date.now()-t>15*60*1000)logout();}},10000);
-window.addEventListener("load",()=>{if(ok()){touch();}else show();});
+
+async function sha256(text) {
+  const data = new TextEncoder().encode(text);
+  const hashBuffer = await crypto.subtle.digest("SHA-256", data);
+  return Array.from(new Uint8Array(hashBuffer))
+    .map((byte) => byte.toString(16).padStart(2, "0"))
+    .join("");
+}
+
+function isAuthenticated() {
+  return (
+    localStorage.getItem(AUTH_KEY) === "1" &&
+    localStorage.getItem(DAY_KEY) === today()
+  );
+}
+
+function markActivity() {
+  localStorage.setItem(LAST_KEY, String(Date.now()));
+}
+
+function logout() {
+  localStorage.removeItem(AUTH_KEY);
+  localStorage.removeItem(LAST_KEY);
+  showLogin();
+}
+
+function showLogoutButton() {
+  if (document.getElementById("logoutButton")) return;
+
+  const button = document.createElement("button");
+  button.id = "logoutButton";
+  button.type = "button";
+  button.textContent = "Cerrar sesión";
+  button.addEventListener("click", logout);
+  document.body.appendChild(button);
+}
+
+function hideLogoutButton() {
+  document.getElementById("logoutButton")?.remove();
+}
+
+function showLogin() {
+  hideLogoutButton();
+
+  if (document.getElementById("authOverlay")) return;
+
+  document.body.insertAdjacentHTML(
+    "beforeend",
+    `<div id="authOverlay">
+      <div id="authBox">
+        <h2>Acceso</h2>
+        <p>Introduce la clave para entrar en Administración Pedidos.</p>
+        <input id="authPassword" type="password" placeholder="Contraseña" autocomplete="current-password" />
+        <button id="authEnter" type="button">Entrar</button>
+        <p id="authError"></p>
+      </div>
+    </div>`
+  );
+
+  const input = document.getElementById("authPassword");
+  const button = document.getElementById("authEnter");
+  const error = document.getElementById("authError");
+
+  async function validatePassword() {
+    const passwordHash = await sha256(input.value);
+
+    if (passwordHash === APP_PASSWORD_HASH) {
+      localStorage.setItem(AUTH_KEY, "1");
+      localStorage.setItem(DAY_KEY, today());
+      markActivity();
+      document.getElementById("authOverlay")?.remove();
+      showLogoutButton();
+      input.value = "";
+      return;
+    }
+
+    error.textContent = "Contraseña incorrecta";
+    input.value = "";
+    input.focus();
+  }
+
+  button.addEventListener("click", validatePassword);
+  input.addEventListener("keydown", (event) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      validatePassword();
+    }
+  });
+
+  setTimeout(() => input.focus(), 80);
+}
+
+function checkSession() {
+  if (!isAuthenticated()) {
+    showLogin();
+    return;
+  }
+
+  const lastActivity = Number(localStorage.getItem(LAST_KEY) || 0);
+
+  if (!lastActivity || Date.now() - lastActivity > INACTIVITY_LIMIT_MS) {
+    logout();
+    return;
+  }
+
+  showLogoutButton();
+}
+
+["click", "touchstart", "keydown", "mousemove", "scroll"].forEach((eventName) => {
+  document.addEventListener(
+    eventName,
+    () => {
+      if (isAuthenticated()) markActivity();
+    },
+    { passive: true }
+  );
+});
+
+window.addEventListener("load", () => {
+  if (isAuthenticated()) {
+    markActivity();
+    showLogoutButton();
+  } else {
+    showLogin();
+  }
+});
+
+window.addEventListener("focus", checkSession);
+document.addEventListener("visibilitychange", () => {
+  if (document.visibilityState === "visible") checkSession();
+});
+
+setInterval(checkSession, 10000);
 </script>
+
 
 </body>
 </html>
